@@ -160,6 +160,7 @@ module.exports = async function handler(req, res) {
     if (!sow) throw new Error('Empty response');
     return res.status(200).json({ sow, plan, remaining: Math.max(0, limit - used) });
   } catch (err) {
+    console.error('Gemini request failed:', err && err.message); // visible in Vercel Logs
     await decr(counterKey); // refund the generation on failure
     return res.status(502).json({ error: 'Generation failed. Please try again in a moment.' });
   }
